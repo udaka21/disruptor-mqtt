@@ -8,9 +8,6 @@ import java.util.concurrent.Executors;
 
 /**
  * @author Sidath Weerasinghe and Udaka Manawadu
- */
-
-/**
  * A class to control the disruptor engine. It initialize the disruptor,
  * submits messages to event producers and closes the disruptor.
  * */
@@ -40,9 +37,9 @@ public class LMAXWriter {
         if (ringBufferSize == 0) {
             ringBufferSize = 1024;
         }
-
         // ring buffer size always has to be the power of 2.
         // so if it is not, make it equal to the nearest integer.
+
         double power = Math.log(ringBufferSize) / Math.log(2);
         if (power % 1 != 0) {
             power = Math.ceil(power);

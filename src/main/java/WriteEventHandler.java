@@ -8,10 +8,9 @@ import org.slf4j.LoggerFactory;
 
 /**
  * @author Sidath Weerasinghe and Udaka Manawadu
+ * This class implements EventHandler interface.
  */
 public class WriteEventHandler implements EventHandler<WriteEvent> {
-
-    ////////////////////////////////////////////////////////////////////////////////////
 
     private final long ordinal;
     private final long numberOfConsumers;
@@ -22,11 +21,7 @@ public class WriteEventHandler implements EventHandler<WriteEvent> {
         this.numberOfConsumers = numberOfConsumers;
     }
 
-  //////////////////////////////////////////////////////////////////////////////////
-
-    private Logger logger = LoggerFactory.getLogger(getClass());
-
-    //private static final Log log = LogFactory.getLog(App.class);
+ private Logger logger = LoggerFactory.getLogger(getClass());
 
     // Java temporary directory location
     private static final String JAVA_TMP_DIR = System.getProperty("java.io.tmpdir");
@@ -42,38 +37,20 @@ public class WriteEventHandler implements EventHandler<WriteEvent> {
 
     public void onEvent(WriteEvent writeEvent, long sequence, boolean endOfBatch) throws Exception {
 
+        // Creating mqtt publisher client
         MqttClient mqttPublisherClient = getNewMqttClient(publisherClientId);
 
-
-       // if (writeEvent != null && writeEvent.get() != null) {
+       //This If statement responsible for consume one message for only one handler.
         if ((sequence % numberOfConsumers) == ordinal){
-
-//*******************************************************************************
-
-
 
             logger.info("Running sample");
             byte[] payload = writeEvent.get().getBytes();
-
-            logger.error(new String(payload) + " processed .");
-
+            logger.info(new String(payload) + " processed .");
 
             try {
-                // Creating mqtt subscriber client
-                // MqttClient mqttSubscriberClient = getNewMqttClient(subscriberClientId);
-
-                // Creating mqtt publisher client
-                //MqttClient mqttPublisherClient = getNewMqttClient(publisherClientId);
-
-                // Subscribing to mqtt topic "simpleTopic"
-                //mqttSubscriberClient.subscribe(topic, QualityOfService.LEAST_ONCE.getValue());
 
                 // Publishing to mqtt topic "simpleTopic"
                 mqttPublisherClient.publish(topic, payload, QualityOfService.LEAST_ONCE.getValue(), retained);
-
-                //mqttPublisherClient.disconnect();
-                // mqttSubscriberClient.disconnect();
-
                 String s = new String(payload);
                 logger.info(s);
 
@@ -82,27 +59,21 @@ public class WriteEventHandler implements EventHandler<WriteEvent> {
                 logger.error("Error running the sample", e);
             }
 
-
         }
 
-
-
+        //client disconnect method.
        mqttPublisherClient.disconnect();
        logger.info("Clients Disconnected!");
 
-
-        //**********************************************************************
-          //  String message = writeEvent.get();
-
-            // Put you business logic here.
-            // here it will print only the submitted message.
-
-
-
-           // logger.error(message + " processed .");
-
         }
 
+    /**
+     * Crate a new MQTT client and connect it to the server.
+     *
+     * @param clientId The unique mqtt client Id
+     * @return Connected MQTT client
+     * @throws MqttException
+     */
     private static MqttClient getNewMqttClient(String clientId) throws MqttException {
         //Store messages until server fetches them
         MqttDefaultFilePersistence dataStore = new MqttDefaultFilePersistence(JAVA_TMP_DIR + "/" + clientId);
@@ -111,7 +82,6 @@ public class WriteEventHandler implements EventHandler<WriteEvent> {
         SimpleMQTTCallback callback = new SimpleMQTTCallback();
         mqttClient.setCallback(callback);
 
-
         MqttConnectOptions connectOptions = new MqttConnectOptions();
 
         connectOptions.setUserName("admin");
@@ -119,13 +89,7 @@ public class WriteEventHandler implements EventHandler<WriteEvent> {
         connectOptions.setCleanSession(true);
         mqttClient.connect(connectOptions);
 
-
         return mqttClient;
     }
-
-
-
-
-
-    }
+}
 
