@@ -7,7 +7,9 @@ import java.io.FileReader;
 import java.io.IOException;
 
 /**
- * Created by wso2 on 7/22/16.
+ * @author Sidath Weerasinghe and Udaka Manawadu
+ *This DisruptorDemo contains the main method.
+ *
  */
 
 public class DisruptorDemo {
@@ -27,7 +29,7 @@ public class DisruptorDemo {
         BufferedReader reader = new BufferedReader(new FileReader(fileName));
 
         try {
-
+            //count how many line on  the  txy file.
             while (reader.readLine() != null){
                 lines++;}
             reader.close();
@@ -38,7 +40,8 @@ public class DisruptorDemo {
             BufferedReader bufferedReader = new BufferedReader(fileReader);
 
             for (int i = 0; i < lines; i++) {
-                line = bufferedReader.readLine();
+                line = bufferedReader.readLine(); //read line by line.
+                // submit messages to write concurrently using disruptor
                 lmaxWriter.submitMessage(line);
             }
 
@@ -48,9 +51,6 @@ public class DisruptorDemo {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
-        // submit messages to write concurrently using disruptor
 
         logger.info("All message submitted.");
 
