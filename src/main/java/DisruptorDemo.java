@@ -31,7 +31,7 @@ public class DisruptorDemo {
             while (reader.readLine() != null){
                 lines++;}
             reader.close();
-            // FileReader reads text files in the default encoding.
+            // FileReader reads text files in the default encoding..
             FileReader fileReader = new FileReader(fileName);
 
             // Always wrap FileReader in BufferedReader.
