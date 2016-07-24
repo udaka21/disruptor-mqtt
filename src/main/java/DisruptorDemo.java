@@ -6,7 +6,6 @@ import java.io.*;
 /**
  * @author Sidath Weerasinghe and Udaka Manawadu
  *This DisruptorDemo contains the main method.
- *
  */
 
 public class DisruptorDemo {
