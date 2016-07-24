@@ -1,9 +1,7 @@
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+
+import java.io.*;
 
 /**
  * @author Sidath Weerasinghe and Udaka Manawadu
@@ -38,7 +36,7 @@ public class DisruptorDemo {
             // Always wrap FileReader in BufferedReader.
             BufferedReader bufferedReader = new BufferedReader(fileReader);
 
-            for (int i = 0; i < lines; i++) {
+            for (int i = 0; i < 10; i++) {
                 line = bufferedReader.readLine(); //read line by line.
                 // submit messages to write concurrently using disruptor
                 lmaxWriter.submitMessage(line);
